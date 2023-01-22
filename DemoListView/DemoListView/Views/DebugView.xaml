@@ -9,7 +9,28 @@
     </ContentPage.BindingContext>
     <ContentPage.Content>
         <ListView ItemsSource="{Binding DebugInfos}"
-                  BackgroundColor="Transparent">
+                  BackgroundColor="Transparent"
+                  HorizontalScrollBarVisibility="Always">
+            <ListView.Header>
+                <StackLayout
+                    Orientation="Horizontal">
+                    <Grid ColumnDefinitions="4">
+                        <Label Grid.Column="0" Text="Customer"/>
+                        <Label Grid.Column="1" Text="Device Id"/>
+                        <Label Grid.Column="2" Text="Access Code"/>
+                        
+                    </Grid>
+
+                </StackLayout>
+
+            </ListView.Header>
+            <ListView.Footer>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Debug Mode"/>
+
+                </StackLayout>
+
+            </ListView.Footer>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <TextCell Text="{Binding CustomerName}"/>
