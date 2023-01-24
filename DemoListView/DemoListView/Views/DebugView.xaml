@@ -3,43 +3,104 @@
     xmlns:viewmodels="clr-namespace:DemoListView.ViewModels"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="DemoListView.Views.DebugView">
+    x:Class="DemoListView.Views.DebugView"
+    Title="Debug Page">
     <ContentPage.BindingContext>
         <viewmodels:DebugViewModel/>
     </ContentPage.BindingContext>
     <ContentPage.Content>
-        <ListView ItemsSource="{Binding DebugInfos}"
-                  BackgroundColor="Transparent"
-                  HorizontalScrollBarVisibility="Always">
-            <ListView.Header>
-                <StackLayout
-                    Orientation="Horizontal">
-                    <Grid ColumnDefinitions="4">
-                        <Label Grid.Column="0" Text="Customer"/>
-                        <Label Grid.Column="1" Text="Device Id"/>
-                        <Label Grid.Column="2" Text="Access Code"/>
-                        
+        <StackLayout>
+        <ListView 
+            x:Name="DebugInfoListView"
+            ItemsSource="{Binding DebugInfos}"
+            SelectedItem="{Binding SelectedDebugInfo, Mode=TwoWay}"
+            BackgroundColor="Transparent"
+            HorizontalScrollBarVisibility="Always"
+            HasUnevenRows="True"
+            Header=""
+            Footer="">
+            <ListView.HeaderTemplate>
+                <DataTemplate>
+                    <Grid 
+                            Padding="12"
+                            BackgroundColor="Blue">
+                        <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="1.3*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions> 
+                        <Label 
+                                Grid.Column="0"
+                                TextColor="White" 
+                                FontSize="12"
+                                Text="Customer"/>
+                        <Label 
+                                Grid.Column="1"
+                                TextColor="White" 
+                                FontSize="12"
+                                Text="Device Id"/>
+                        <Label 
+                                Grid.Column="2"
+                                TextColor="White" 
+                                FontSize="12"
+                                Text="Acess Code"/>
+                        <Label 
+                                Grid.Column="3"
+                                TextColor="White" 
+                                FontSize="12"
+                                Text="Calibrate"
+                            HorizontalTextAlignment="Center"/>
                     </Grid>
-
-                </StackLayout>
-
-            </ListView.Header>
-            <ListView.Footer>
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="Debug Mode"/>
-
-                </StackLayout>
-
-            </ListView.Footer>
+                </DataTemplate>
+            </ListView.HeaderTemplate>
             <ListView.ItemTemplate>
                 <DataTemplate>
-                    <TextCell Text="{Binding CustomerName}"/>
+                    <ViewCell>
+                        <Grid Padding="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1.3*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" FontSize="12" Text="{Binding CustomerName}"/>
+                            <Label Grid.Column="1" FontSize="12" Text="{Binding DeviceId}"/>
+                            <Label Grid.Column="2" FontSize="12" Text="{Binding AccessCode}"/>
+                            <Button 
+                                Grid.Column="3" 
+                                Grid.RowSpan="2" 
+                                FontSize="10" 
+                                Text="Go" 
+                                WidthRequest="38" 
+                                HeightRequest="40" 
+                                HorizontalOptions="Center"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type viewmodels:DebugViewModel}}, Path=CalibrateCommand}"
+                                CommandParameter="{Binding .}"/>
+                            <Label Grid.Row="1" Text="{Binding RawRssi, StringFormat='Raw RSSI: {0}'}" FontSize="12" />
+                            <Label Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding CorrectedRssi, StringFormat='Corrected RSSI: {0}'}" FontSize="12"/>
 
+                        </Grid>
+                        </ViewCell>
                 </DataTemplate>
-
             </ListView.ItemTemplate>
-
+            <ListView.FooterTemplate>
+                <DataTemplate>
+                    <ContentView BackgroundColor="Blue">
+                        <Label Margin="10" HorizontalOptions="CenterAndExpand" Text="Calibration is not enabled."  TextColor="White"/>
+                    </ContentView>
+                </DataTemplate>
+            </ListView.FooterTemplate>
         </ListView>
-    </ContentPage.Content>
+            <!--<StackLayout>
+                <Button Command="{Binding CalibrateCommand}" CommandParameter="" Text="Calibrate"/>
+            </StackLayout>-->
+        </StackLayout>
+        
+        
+    </ContentPage.Content>    
 </ContentPage>
 

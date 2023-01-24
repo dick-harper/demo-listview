@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using DemoListView.Models;
 using Xamarin.CommunityToolkit.ObjectModel;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 
 namespace DemoListView.ViewModels
 {
@@ -8,17 +13,28 @@ namespace DemoListView.ViewModels
     {
         private ObservableRangeCollection<DebugInfo> _debugInfos;
         private DebugInfo _selectedDebugInfo;
+        
+        public ICommand CalibrateCommand { get; }
 
         public DebugViewModel()
         {
+            CalibrateCommand = new RelayCommand<object>(OnCalibrate);
+
             _debugInfos = GetData();
         }
-
+        
         public ObservableRangeCollection<DebugInfo> DebugInfos
         {
             get => _debugInfos;
 
             set => SetProperty(ref _debugInfos, value);
+        }
+
+        public DebugInfo SelectedDebugInfo
+        {
+            get => _selectedDebugInfo;
+
+            set => SetProperty(ref _selectedDebugInfo, value);
         }
 
         private ObservableRangeCollection<DebugInfo> GetData()
@@ -67,6 +83,15 @@ namespace DemoListView.ViewModels
                 }
             };
         }
+
+        private void OnCalibrate(object obj)
+        {
+            var debugInfo = (obj as DebugInfo);
+            SelectedDebugInfo= debugInfo;
+            var deviceId = debugInfo.DeviceId;
+            
+            var alert = Application.Current.MainPage.DisplayAlert("Calibrate feature is not available at this time.", "Device Id: " + deviceId, "Cancel");
+        }        
     }
 }
 
